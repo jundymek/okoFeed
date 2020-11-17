@@ -1,5 +1,5 @@
-import React from "react";
-import { useQuery } from "react-query";
+import React, { useEffect, useState } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 interface Post {
   title: string;
@@ -9,20 +9,47 @@ interface Post {
   url: string;
 }
 
-const getPosts = () => {
-  const posts = fetch("http://localhost:3000/posts/")
-    .then((res) => res.json())
-    .then((data) => data);
-  return posts;
-};
-
 const Posts = React.memo(() => {
-  const { isLoading, data } = useQuery("posts", getPosts);
-  console.log(data);
-  if (isLoading) {
-    return <span>Loading...</span>;
-  }
-  return <div>{data && data.map((item: Post) => <p>{item.title}</p>)}</div>;
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [lastIndex, setLastIndex] = useState<number>(0);
+
+  console.log(posts.length);
+
+  useEffect(() => {
+    fetch("http://localhost:3000/posts?_end=100")
+      .then((res) => res.json())
+      .then((data) => {
+        setPosts(data);
+        setLastIndex(101);
+      });
+  }, []);
+
+  const fetchMore = () => {
+    setTimeout(() => {
+      fetch(`http://localhost:3000/posts?_start=${lastIndex}&_limit=10`)
+        .then((res) => res.json())
+        .then((data) => {
+          setLastIndex((prevState) => prevState + 1);
+          setPosts((prevState) => [...prevState, ...data]);
+        });
+    }, 2000);
+  };
+
+  return (
+    <div>
+      <InfiniteScroll dataLength={posts.length} next={fetchMore} hasMore={true} loader={<h4>Loading...</h4>}>
+        {posts.map((i, index) => {
+          return (
+            <div key={index}>
+              <p>
+                {i.title} - #{index}
+              </p>
+            </div>
+          );
+        })}
+      </InfiniteScroll>
+    </div>
+  );
 });
 
 export default Posts;
