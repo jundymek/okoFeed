@@ -49,35 +49,32 @@ const Posts = React.memo(() => {
 
   return (
     <div>
-      <div>
-        <h1 className="text-red-600">OkoPress</h1>
-        {status === "loading" ? (
-          <p>Loading...</p>
-        ) : status === "error" ? (
-          <span>Error: : {error}</span>
-        ) : (
-          <>
-            {data &&
-              data.map((page, i) => (
-                <React.Fragment key={i}>
-                  {page.map((post: Post, index: number) => {
-                    return <p key={index}>{post.title}</p>;
-                  })}
-                </React.Fragment>
-              ))}
-            <div>
-              <button
-                ref={loadMoreButtonRef}
-                onClick={() => fetchMore()}
-                disabled={!canFetchMore || (isFetchingMore as boolean | undefined)}
-              >
-                {isFetchingMore ? "Loading more..." : canFetchMore ? "Load More" : "Nothing more to load"}
-              </button>
-            </div>
-            <div>{isFetching && !isFetchingMore ? "Background Updating..." : null}</div>
-          </>
-        )}
-      </div>
+      {status === "loading" ? (
+        <p>Loading...</p>
+      ) : status === "error" ? (
+        <span>Error: : {error}</span>
+      ) : (
+        <>
+          {data &&
+            data.map((page, i) => (
+              <React.Fragment key={i}>
+                {page.map((post: Post, index: number) => {
+                  return <p key={index}>{post.title}</p>;
+                })}
+              </React.Fragment>
+            ))}
+          <div>
+            <button
+              ref={loadMoreButtonRef}
+              onClick={() => fetchMore()}
+              disabled={!canFetchMore || (isFetchingMore as boolean | undefined)}
+            >
+              {isFetchingMore ? "Loading more..." : canFetchMore ? "Load More" : "Nothing more to load"}
+            </button>
+          </div>
+          <div>{isFetching && !isFetchingMore ? "Background Updating..." : null}</div>
+        </>
+      )}
     </div>
   );
 });
