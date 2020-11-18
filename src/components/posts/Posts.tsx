@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { useInfiniteQuery } from "react-query";
 
 import useIntersectionObserver from "../../hooks/useIntersectionObserver";
+import Post from "./post/Post";
 
-interface Post {
+export interface SinglePost {
   title: string;
   thumb: string;
   date: string;
@@ -29,6 +30,11 @@ const Posts = React.memo(() => {
     fetchPosts,
     {
       getFetchMore: (lastGroup, allGroups): boolean | number => {
+        console.log({ isFetching });
+        console.log({ isFetchingMore });
+        console.log({ fetchMore });
+        console.log({ canFetchMore });
+        console.log({ status });
         const morePagesExist =
           totalNumberOfRecords === 0 || (lastGroup?.length === 10 && allGroups.length * 10 - 1 <= totalNumberOfRecords);
         if (!morePagesExist) return false;
@@ -58,12 +64,14 @@ const Posts = React.memo(() => {
           {data &&
             data.map((page, i) => (
               <React.Fragment key={i}>
-                {page.map((post: Post, index: number) => {
-                  return <p key={index}>{post.title}</p>;
-                })}
+                <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+                  {page.map((post: SinglePost, index: number) => {
+                    return <Post key={index} item={post} />;
+                  })}
+                </div>
               </React.Fragment>
             ))}
-          <div>
+          <div className="py-5">
             <button
               ref={loadMoreButtonRef}
               onClick={() => fetchMore()}
