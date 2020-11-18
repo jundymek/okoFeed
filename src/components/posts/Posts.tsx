@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from "react";
-import InfiniteScroll from "react-infinite-scroll-component";
+import React, { useState } from "react";
+import { useInfiniteQuery } from "react-query";
+
+import useIntersectionObserver from "../../hooks/useIntersectionObserver";
 
 interface Post {
   title: string;
@@ -10,44 +12,72 @@ interface Post {
 }
 
 const Posts = React.memo(() => {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [lastIndex, setLastIndex] = useState<number>(0);
+  const [totalNumberOfRecords, setTotalNumberOfRecords] = useState<number>(0);
 
-  console.log(posts.length);
-
-  useEffect(() => {
-    fetch("http://localhost:3000/posts?_end=100")
-      .then((res) => res.json())
-      .then((data) => {
-        setPosts(data);
-        setLastIndex(101);
-      });
-  }, []);
-
-  const fetchMore = () => {
-    setTimeout(() => {
-      fetch(`http://localhost:3000/posts?_start=${lastIndex}&_limit=10`)
-        .then((res) => res.json())
-        .then((data) => {
-          setLastIndex((prevState) => prevState + 1);
-          setPosts((prevState) => [...prevState, ...data]);
-        });
-    }, 2000);
+  const fetchPosts = async (key: number, index = 0) => {
+    const response = await fetch(`http://localhost:3000/posts?_start=${index}&_limit=10`);
+    const numberOfRecords = response.headers.get("x-total-count");
+    if (totalNumberOfRecords === 0) {
+      numberOfRecords && setTotalNumberOfRecords(parseInt(numberOfRecords));
+    }
+    const posts = await response.json();
+    return posts;
   };
+
+  const { status, data, error, isFetching, isFetchingMore, fetchMore, canFetchMore } = useInfiniteQuery(
+    "posts",
+    fetchPosts,
+    {
+      getFetchMore: (lastGroup, allGroups): boolean | number => {
+        const morePagesExist =
+          totalNumberOfRecords === 0 || (lastGroup?.length === 10 && allGroups.length * 10 - 1 <= totalNumberOfRecords);
+        if (!morePagesExist) return false;
+        return (allGroups.length + 1) * 10;
+      },
+    }
+  );
+
+  const loadMoreButtonRef = React.useRef(null);
+
+  console.log(data);
+
+  useIntersectionObserver({
+    target: loadMoreButtonRef,
+    onIntersect: fetchMore,
+    enabled: canFetchMore,
+  });
 
   return (
     <div>
-      <InfiniteScroll dataLength={posts.length} next={fetchMore} hasMore={true} loader={<h4>Loading...</h4>}>
-        {posts.map((i, index) => {
-          return (
-            <div key={index}>
-              <p>
-                {i.title} - #{index}
-              </p>
+      <div>
+        <h1>Infinite Loading</h1>
+        {status === "loading" ? (
+          <p>Loading...</p>
+        ) : status === "error" ? (
+          <span>Error: : {error}</span>
+        ) : (
+          <>
+            {data &&
+              data.map((page, i) => (
+                <React.Fragment key={i}>
+                  {page.map((post: Post, index: number) => {
+                    return <p key={index}>{post.title}</p>;
+                  })}
+                </React.Fragment>
+              ))}
+            <div>
+              <button
+                ref={loadMoreButtonRef}
+                onClick={() => fetchMore()}
+                disabled={!canFetchMore || (isFetchingMore as boolean | undefined)}
+              >
+                {isFetchingMore ? "Loading more..." : canFetchMore ? "Load More" : "Nothing more to load"}
+              </button>
             </div>
-          );
-        })}
-      </InfiniteScroll>
+            <div>{isFetching && !isFetchingMore ? "Background Updating..." : null}</div>
+          </>
+        )}
+      </div>
     </div>
   );
 });
