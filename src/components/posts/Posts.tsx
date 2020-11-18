@@ -50,7 +50,7 @@ const Posts = React.memo(() => {
   return (
     <div>
       <div>
-        <h1>Infinite Loading</h1>
+        <h1 className="text-red-600">OkoPress</h1>
         {status === "loading" ? (
           <p>Loading...</p>
         ) : status === "error" ? (
