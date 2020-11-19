@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
 import { QueryCache, ReactQueryCacheProvider } from "react-query";
 import Header from "./components/header/Header";
-import Posts from "./components/posts/Posts";
+import PostsManager from "./components/postsManager/PostsManager";
 
 const queryCache = new QueryCache();
 
@@ -10,7 +10,7 @@ function App(): ReactElement {
     <ReactQueryCacheProvider queryCache={queryCache}>
       <div className="container mx-auto">
         <Header />
-        <Posts />
+        <PostsManager />
       </div>
     </ReactQueryCacheProvider>
   );

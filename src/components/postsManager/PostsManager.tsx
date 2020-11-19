@@ -12,7 +12,7 @@ export interface SinglePost {
   url: string;
 }
 
-const Posts = React.memo(() => {
+const PostsManager = React.memo(() => {
   const [totalNumberOfRecords, setTotalNumberOfRecords] = useState<number>(0);
 
   const fetchPosts = async (key: number, index = 0) => {
@@ -63,13 +63,13 @@ const Posts = React.memo(() => {
         <>
           {data &&
             data.map((page, i) => (
-              <React.Fragment key={i}>
-                <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <React.Fragment key={i}>
                   {page.map((post: SinglePost, index: number) => {
                     return <Post key={index} item={post} />;
                   })}
-                </div>
-              </React.Fragment>
+                </React.Fragment>
+              </div>
             ))}
           <div className="py-5">
             <button
@@ -87,4 +87,4 @@ const Posts = React.memo(() => {
   );
 });
 
-export default Posts;
+export default PostsManager;
