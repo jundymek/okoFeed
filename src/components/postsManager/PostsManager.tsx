@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useInfiniteQuery } from "react-query";
 
 import useIntersectionObserver from "../../hooks/useIntersectionObserver";
-import Post from "./post/Post";
+import Posts from "./posts/Posts";
 
 export interface SinglePost {
   title: string;
@@ -15,7 +15,7 @@ export interface SinglePost {
 const PostsManager = React.memo(() => {
   const [totalNumberOfRecords, setTotalNumberOfRecords] = useState<number>(0);
 
-  const fetchPosts = async (key: number, index = 0) => {
+  const fetchPosts = async (index = 0) => {
     const response = await fetch(`http://localhost:3000/posts?_start=${index}&_limit=10`);
     const numberOfRecords = response.headers.get("x-total-count");
     if (totalNumberOfRecords === 0) {
@@ -56,15 +56,7 @@ const PostsManager = React.memo(() => {
         <span>Error: : {error}</span>
       ) : (
         <>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {data?.map((page, i) => (
-              <React.Fragment key={i}>
-                {page.map((post: SinglePost, index: number) => {
-                  return <Post key={index} item={post} />;
-                })}
-              </React.Fragment>
-            ))}
-          </div>
+          <Posts data={data} />
           <div className="py-5">
             <button
               ref={loadMoreButtonRef}

@@ -9,11 +9,11 @@ const queryCache = new QueryCache();
 function App(): ReactElement {
   return (
     <ReactQueryCacheProvider queryCache={queryCache}>
+      <Header />
       <div className="container mx-auto">
-        <Header />
         <PostsManager />
-        <Footer />
       </div>
+      <Footer />
     </ReactQueryCacheProvider>
   );
 }

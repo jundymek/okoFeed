@@ -15,8 +15,8 @@ const ImgWrapper = styled.div`
 
 const Post = React.memo<PostProps>(({ item }) => {
   return (
-    <section className="p-2">
-      <a href={item.url} title="item.url">
+    <section className="p-4 shadow-md hover:shadow-lg scale-1 hover:scale-150">
+      <a href={item.url} title={item.url}>
         <h3 className="h-24 font-bold">{item.title}</h3>
         <ImgWrapper>
           <RenderSmoothImage src={item.thumb} alt={item.thumb} objectFit="cover" />
