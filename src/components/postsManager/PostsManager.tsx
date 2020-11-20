@@ -30,11 +30,6 @@ const PostsManager = React.memo(() => {
     fetchPosts,
     {
       getFetchMore: (lastGroup, allGroups): boolean | number => {
-        console.log({ isFetching });
-        console.log({ isFetchingMore });
-        console.log({ fetchMore });
-        console.log({ canFetchMore });
-        console.log({ status });
         const morePagesExist =
           totalNumberOfRecords === 0 || (lastGroup?.length === 10 && allGroups.length * 10 - 1 <= totalNumberOfRecords);
         if (!morePagesExist) return false;
@@ -54,23 +49,22 @@ const PostsManager = React.memo(() => {
   });
 
   return (
-    <div>
+    <div className="mb-24">
       {status === "loading" ? (
         <p>Loading...</p>
       ) : status === "error" ? (
         <span>Error: : {error}</span>
       ) : (
         <>
-          {data &&
-            data.map((page, i) => (
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <React.Fragment key={i}>
-                  {page.map((post: SinglePost, index: number) => {
-                    return <Post key={index} item={post} />;
-                  })}
-                </React.Fragment>
-              </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {data?.map((page, i) => (
+              <React.Fragment key={i}>
+                {page.map((post: SinglePost, index: number) => {
+                  return <Post key={index} item={post} />;
+                })}
+              </React.Fragment>
             ))}
+          </div>
           <div className="py-5">
             <button
               ref={loadMoreButtonRef}
