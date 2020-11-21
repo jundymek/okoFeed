@@ -1,11 +1,11 @@
 import React from "react";
-import { SinglePost } from "../PostsManager";
+import { SinglePostType } from "../PostsManager";
 import styled from "styled-components";
 import RenderSmoothImage from "render-smooth-image-react";
 import "render-smooth-image-react/build/style.css";
 
 interface PostProps {
-  item: SinglePost;
+  item: SinglePostType;
 }
 
 const ImgWrapper = styled.div`
@@ -21,7 +21,7 @@ const Post = React.memo<PostProps>(({ item }) => {
         <ImgWrapper>
           <RenderSmoothImage src={item.thumb} alt={item.thumb} objectFit="cover" />
         </ImgWrapper>
-        <p className="pt-2 font">{item.excerpt}</p>
+        <p className="pt-2 font-hairline">{item.excerpt}</p>
         <span className="float-right m-2 text-gray-600 text-sm">{item.date}</span>
       </a>
     </section>

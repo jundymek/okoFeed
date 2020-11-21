@@ -8,7 +8,7 @@ import ClockLoader from "react-spinners/ClockLoader";
 
 import styled from "styled-components";
 
-export interface SinglePost {
+export interface SinglePostType {
   title: string;
   thumb: string;
   date: string;
@@ -36,7 +36,7 @@ const PostsManager = React.memo(() => {
     return posts;
   };
 
-  const { status, data, error, isFetchingMore, fetchMore, canFetchMore } = useInfiniteQuery("posts", fetchPosts, {
+  const { status, data, isFetchingMore, fetchMore, canFetchMore } = useInfiniteQuery("posts", fetchPosts, {
     getFetchMore: (lastGroup, allGroups): boolean | number => {
       const morePagesExist =
         totalNumberOfRecords === 0 || (lastGroup?.length === 10 && allGroups.length * 10 - 1 <= totalNumberOfRecords);
