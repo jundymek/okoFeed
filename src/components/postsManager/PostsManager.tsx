@@ -54,13 +54,13 @@ const PostsManager = React.memo(() => {
   });
 
   return (
-    <>
+    <div className="container mx-auto">
       {status === "loading" ? (
         <StyledSpinnerContainer>
           <ClockLoader size={50} color={"#464649"} loading={true} />
         </StyledSpinnerContainer>
       ) : status === "error" ? (
-        <span>Error: : {error}</span>
+        <span>Coś poszło nie tak</span>
       ) : (
         <div className="mb-24">
           <Posts data={data} />
@@ -74,7 +74,7 @@ const PostsManager = React.memo(() => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 });
 
