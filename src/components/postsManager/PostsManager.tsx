@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import { useInfiniteQuery } from "react-query";
 
 import useIntersectionObserver from "../../hooks/useIntersectionObserver";
+import LoadMoreButton from "./loadMoreButton/LoadMoreButton";
 import Posts from "./posts/Posts";
+import ClockLoader from "react-spinners/ClockLoader";
+
+import styled from "styled-components";
 
 export interface SinglePost {
   title: string;
@@ -12,9 +16,16 @@ export interface SinglePost {
   url: string;
 }
 
+const StyledSpinnerContainer = styled.div`
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+
 const PostsManager = React.memo(() => {
   const [totalNumberOfRecords, setTotalNumberOfRecords] = useState<number>(0);
-
   const fetchPosts = async (index = 0) => {
     const response = await fetch(`http://localhost:3000/posts?_start=${index}&_limit=10`);
     const numberOfRecords = response.headers.get("x-total-count");
@@ -25,51 +36,45 @@ const PostsManager = React.memo(() => {
     return posts;
   };
 
-  const { status, data, error, isFetching, isFetchingMore, fetchMore, canFetchMore } = useInfiniteQuery(
-    "posts",
-    fetchPosts,
-    {
-      getFetchMore: (lastGroup, allGroups): boolean | number => {
-        const morePagesExist =
-          totalNumberOfRecords === 0 || (lastGroup?.length === 10 && allGroups.length * 10 - 1 <= totalNumberOfRecords);
-        if (!morePagesExist) return false;
-        return (allGroups.length + 1) * 10;
-      },
-    }
-  );
+  const { status, data, error, isFetchingMore, fetchMore, canFetchMore } = useInfiniteQuery("posts", fetchPosts, {
+    getFetchMore: (lastGroup, allGroups): boolean | number => {
+      const morePagesExist =
+        totalNumberOfRecords === 0 || (lastGroup?.length === 10 && allGroups.length * 10 - 1 <= totalNumberOfRecords);
+      if (!morePagesExist) return false;
+      return (allGroups.length + 1) * 10;
+    },
+  });
 
   const loadMoreButtonRef = React.useRef(null);
-
-  console.log(data);
 
   useIntersectionObserver({
     target: loadMoreButtonRef,
     onIntersect: fetchMore,
-    enabled: canFetchMore,
+    enabled: data && data.length > 1 && canFetchMore,
   });
 
   return (
-    <div className="mb-24">
+    <>
       {status === "loading" ? (
-        <p>Loading...</p>
+        <StyledSpinnerContainer>
+          <ClockLoader size={50} color={"#464649"} loading={true} />
+        </StyledSpinnerContainer>
       ) : status === "error" ? (
         <span>Error: : {error}</span>
       ) : (
-        <>
+        <div className="mb-24">
           <Posts data={data} />
-          <div className="py-5">
-            <button
-              ref={loadMoreButtonRef}
-              onClick={() => fetchMore()}
-              disabled={!canFetchMore || (isFetchingMore as boolean | undefined)}
-            >
-              {isFetchingMore ? "Loading more..." : canFetchMore ? "Load More" : "Nothing more to load"}
-            </button>
+          <div className="py-5 flex items-center justify-center">
+            <LoadMoreButton
+              loadMoreButtonRef={loadMoreButtonRef}
+              fetchMore={fetchMore}
+              isFetchingMore={isFetchingMore}
+              canFetchMore={canFetchMore}
+            />
           </div>
-          <div>{isFetching && !isFetchingMore ? "Background Updating..." : null}</div>
-        </>
+        </div>
       )}
-    </div>
+    </>
   );
 });
 

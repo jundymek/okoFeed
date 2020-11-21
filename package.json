@@ -16,8 +16,10 @@
     "postcss-cli": "^8.3.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-promise-tracker": "^2.1.0",
     "react-query": "^2.26.2",
     "react-scripts": "4.0.0",
+    "react-spinners": "^0.9.0",
     "render-smooth-image-react": "^1.0.0",
     "typescript": "^4.0.3",
     "web-vitals": "^0.2.4"

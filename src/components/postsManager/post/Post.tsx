@@ -10,7 +10,7 @@ interface PostProps {
 
 const ImgWrapper = styled.div`
   height: 12rem;
-  width: 100%auto;
+  width: 100%;
 `;
 
 const Post = React.memo<PostProps>(({ item }) => {

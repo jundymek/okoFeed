@@ -11853,12 +11853,8 @@ video {
   min-height: 100vh;
 }
 
-.min-w-0 {
-  min-width: 0;
-}
-
-.min-w-full {
-  min-width: 100%;
+.min-w-40 {
+  min-width: 10rem;
 }
 
 .object-contain {
@@ -34048,12 +34044,8 @@ video {
     min-height: 100vh;
   }
 
-  .sm\:min-w-0 {
-    min-width: 0;
-  }
-
-  .sm\:min-w-full {
-    min-width: 100%;
+  .sm\:min-w-40 {
+    min-width: 10rem;
   }
 
   .sm\:object-contain {
@@ -56178,12 +56170,8 @@ video {
     min-height: 100vh;
   }
 
-  .md\:min-w-0 {
-    min-width: 0;
-  }
-
-  .md\:min-w-full {
-    min-width: 100%;
+  .md\:min-w-40 {
+    min-width: 10rem;
   }
 
   .md\:object-contain {
@@ -78308,12 +78296,8 @@ video {
     min-height: 100vh;
   }
 
-  .lg\:min-w-0 {
-    min-width: 0;
-  }
-
-  .lg\:min-w-full {
-    min-width: 100%;
+  .lg\:min-w-40 {
+    min-width: 10rem;
   }
 
   .lg\:object-contain {
@@ -100438,12 +100422,8 @@ video {
     min-height: 100vh;
   }
 
-  .xl\:min-w-0 {
-    min-width: 0;
-  }
-
-  .xl\:min-w-full {
-    min-width: 100%;
+  .xl\:min-w-40 {
+    min-width: 10rem;
   }
 
   .xl\:object-contain {
