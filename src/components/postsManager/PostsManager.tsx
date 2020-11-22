@@ -26,7 +26,7 @@ const StyledSpinnerContainer = styled.div`
 
 const PostsManager = React.memo(() => {
   const [totalNumberOfRecords, setTotalNumberOfRecords] = useState<number>(0);
-  const fetchPosts = async (index = 0) => {
+  const fetchPosts = async (key: string, index = 0) => {
     const response = await fetch(`http://localhost:3000/posts?_start=${index}&_limit=10`);
     const numberOfRecords = response.headers.get("x-total-count");
     if (totalNumberOfRecords === 0) {
