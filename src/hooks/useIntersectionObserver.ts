@@ -13,7 +13,7 @@ export default function useIntersectionObserver({
   root,
   target,
   onIntersect,
-  threshold = 1.0,
+  threshold = 1,
   rootMargin = "0px",
   enabled = true,
 }: ObserverProps): void {
@@ -23,7 +23,13 @@ export default function useIntersectionObserver({
     }
 
     const observer = new IntersectionObserver(
-      (entries) => entries.forEach((entry) => entry.isIntersecting && onIntersect()),
+      (entries) => {
+        console.log(entries);
+        entries.forEach((entry) => {
+          console.log(entry);
+          entry.isIntersecting && onIntersect();
+        });
+      },
       {
         root: root && root.current,
         rootMargin,

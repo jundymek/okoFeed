@@ -47,10 +47,12 @@ const PostsManager = React.memo(() => {
 
   const loadMoreButtonRef = React.useRef(null);
 
+  console.log(loadMoreButtonRef);
+
   useIntersectionObserver({
     target: loadMoreButtonRef,
     onIntersect: fetchMore,
-    enabled: data && data.length > 1 && canFetchMore,
+    enabled: true,
   });
 
   return (
@@ -64,9 +66,9 @@ const PostsManager = React.memo(() => {
       ) : (
         <div className="mb-24">
           <Posts data={data} />
-          <div className="py-5 flex items-center justify-center">
+          <div className="flex items-center justify-center">
             <LoadMoreButton
-              loadMoreButtonRef={loadMoreButtonRef}
+              ref={loadMoreButtonRef}
               fetchMore={fetchMore}
               isFetchingMore={isFetchingMore}
               canFetchMore={canFetchMore}
