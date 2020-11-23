@@ -16,7 +16,7 @@ const Post = React.memo<PostProps>(({ item }) => {
           width="440"
           height="280"
           src={item.thumb}
-          alt={getAlt(item.excerpt)}
+          alt={getAlt(item.title)}
           className="h-48 w-full"
         />
         <p className="pt-2 font-hairline">{item.excerpt}</p>
