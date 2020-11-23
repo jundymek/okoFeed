@@ -1,6 +1,5 @@
 import React from "react";
 import { SinglePostType } from "../PostsManager";
-import "render-smooth-image-react/build/style.css";
 import { getAlt } from "./utils/getAlt";
 
 interface PostProps {
