@@ -1,6 +1,7 @@
 import React from "react";
 import { FetchMoreOptions } from "react-query/types/core/query";
 import ClipLoader from "react-spinners/ClipLoader";
+import useIntersectionObserver from "../../../hooks/useIntersectionObserver";
 
 interface LoadMoreButtonProps {
   isFetchingMore: string | boolean | undefined;
@@ -8,8 +9,14 @@ interface LoadMoreButtonProps {
   fetchMore: (fetchMoreVariable?: unknown, options?: FetchMoreOptions | undefined) => Promise<boolean[] | undefined>;
 }
 
-const LoadMoreButton = React.forwardRef<HTMLButtonElement, LoadMoreButtonProps>(
+const LoadMoreButton = React.forwardRef<any, LoadMoreButtonProps>(
   ({ isFetchingMore, canFetchMore, fetchMore }, ref) => {
+    useIntersectionObserver({
+      target: ref,
+      onIntersect: fetchMore,
+      enabled: true,
+    });
+
     return (
       <button
         ref={ref}

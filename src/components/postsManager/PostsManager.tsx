@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useInfiniteQuery } from "react-query";
 
-import useIntersectionObserver from "../../hooks/useIntersectionObserver";
 import LoadMoreButton from "./loadMoreButton/LoadMoreButton";
 import Posts from "./posts/Posts";
 import ClockLoader from "react-spinners/ClockLoader";
@@ -44,16 +43,7 @@ const PostsManager = React.memo(() => {
       return (allGroups.length + 1) * 10;
     },
   });
-
   const loadMoreButtonRef = React.useRef(null);
-
-  console.log(loadMoreButtonRef);
-
-  useIntersectionObserver({
-    target: loadMoreButtonRef,
-    onIntersect: fetchMore,
-    enabled: true,
-  });
 
   return (
     <div className="container mx-auto">

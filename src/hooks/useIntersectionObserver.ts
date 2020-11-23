@@ -1,8 +1,8 @@
-import React, { MutableRefObject } from "react";
+import React from "react";
 
 interface ObserverProps {
   root?: React.RefObject<Element>;
-  target: MutableRefObject<Element> | MutableRefObject<null>;
+  target: any;
   onIntersect: () => void;
   threshold?: number | number[];
   rootMargin?: string;
@@ -14,19 +14,17 @@ export default function useIntersectionObserver({
   target,
   onIntersect,
   threshold = 1,
-  rootMargin = "0px",
+  rootMargin = "200px",
   enabled = true,
 }: ObserverProps): void {
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     if (!enabled) {
       return;
     }
 
     const observer = new IntersectionObserver(
       (entries) => {
-        console.log(entries);
         entries.forEach((entry) => {
-          console.log(entry);
           entry.isIntersecting && onIntersect();
         });
       },
@@ -48,5 +46,5 @@ export default function useIntersectionObserver({
     return () => {
       observer.unobserve(el);
     };
-  }, [target.current, enabled]);
+  }, [target.current, enabled, onIntersect, root, rootMargin, threshold]);
 }
