@@ -4,7 +4,10 @@ const Footer = (): ReactElement => {
   return (
     <footer className="h-16 w-screen bg-gray-800 fixed bottom-0 flex justify-center items-center">
       <p className="text-gray-200 text-xs">
-        Wykonał z pasją i ❤️ <span className="ml-1 underline">Łukasz Dymek</span>
+        Wykonał z pasją i ❤️{" "}
+        <a className="ml-1 underline" href="https://github.com/jundymek">
+          Łukasz Dymek
+        </a>
       </p>
     </footer>
   );
